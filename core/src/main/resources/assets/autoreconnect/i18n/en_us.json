@@ -1,7 +1,7 @@
 {
-  "example": {
+  "autoreconnect": {
     "settings": {
-      "name": "ExampleAddon",
+      "name": "AutoReconnect",
       "enabled": {
         "name": "Enabled"
       }
