@@ -1,0 +1,20 @@
+.button-container {
+  height: 20;
+  width: fit-content;
+  orientation: horizontal;
+  space-between-entries: 2;
+
+  Button {
+    padding-left: 10;
+    padding-right: 10;
+  }
+
+  .reconnect-button {
+    width: var(--auto-reconnect-width);
+  }
+
+  .back-button {
+    min-width: fit-content;
+    width: calc(var(--auto-reconnect-width) * 1.5);
+  }
+}

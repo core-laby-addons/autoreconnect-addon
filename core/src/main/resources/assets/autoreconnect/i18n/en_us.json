@@ -4,7 +4,27 @@
       "name": "AutoReconnect",
       "enabled": {
         "name": "Enabled"
+      },
+      "delay": {
+        "name": "Seconds Until Reconnect"
+      },
+      "reconnectOnLoginDeny": {
+        "name": "Reconnect After Login Deny",
+        "description": "Automatically reconnect after a login has been denied (for example: if you're banned, you're playing with the wrong Minecraft version, if you're not whitelisted, etc.)"
+      },
+      "reconnectOnKick": {
+        "name": "Reconnect After Kick",
+        "description": "Automatically reconnect after you've been kicked from the server"
+      },
+      "header": {
+        "scenarios": {
+          "name": "Scenarios"
+        }
       }
+    },
+    "activity": {
+      "reconnect": "Reconnect in: ",
+      "remainingSeconds": "%ss"
     }
   }
 }
