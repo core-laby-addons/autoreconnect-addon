@@ -11,6 +11,7 @@ java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
 labyMod {
     defaultPackageName = "dev.jumpingpxl.addons.autoreconnect" //change this to your main package name (used by all modules)
+    
     addonInfo {
         namespace = "autoreconnect"
         displayName = "AutoReconnect"
