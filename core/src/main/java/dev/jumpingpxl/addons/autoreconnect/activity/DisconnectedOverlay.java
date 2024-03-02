@@ -1,12 +1,12 @@
 package dev.jumpingpxl.addons.autoreconnect.activity;
 
 import dev.jumpingpxl.addons.autoreconnect.AutoReconnect;
+import java.util.concurrent.TimeUnit;
 import net.labymod.api.client.component.Component;
 import net.labymod.api.client.component.format.NamedTextColor;
 import net.labymod.api.client.component.format.TextColor;
 import net.labymod.api.client.gui.navigation.NavigationElement;
 import net.labymod.api.client.gui.navigation.elements.ScreenNavigationElement;
-import net.labymod.api.client.gui.screen.LabyScreen;
 import net.labymod.api.client.gui.screen.Parent;
 import net.labymod.api.client.gui.screen.ScreenInstance;
 import net.labymod.api.client.gui.screen.activity.AutoActivity;
@@ -25,8 +25,6 @@ import net.labymod.api.util.I18n;
 import net.labymod.api.util.bounds.ModifyReason;
 import net.labymod.api.util.bounds.ReasonableMutableRectangle;
 import net.labymod.api.util.concurrent.task.Task;
-import org.jetbrains.annotations.Nullable;
-import java.util.concurrent.TimeUnit;
 
 @AutoActivity
 @Link("disconnected.lss")
@@ -100,11 +98,6 @@ public class DisconnectedOverlay extends AbstractLayerActivity {
     this.buttonContainer.addFlexibleContent(backButton);
 
     this.document.addChild(this.buttonContainer);
-  }
-
-  @Override
-  public <T extends LabyScreen> @Nullable T renew() {
-    return new DisconnectedOverlay(this.parentScreen, this.autoReconnect).generic();
   }
 
   @Override

@@ -2,7 +2,6 @@ package dev.jumpingpxl.addons.autoreconnect;
 
 import dev.jumpingpxl.addons.autoreconnect.activity.DisconnectedOverlay;
 import dev.jumpingpxl.addons.autoreconnect.listener.ServerKickListener;
-import net.labymod.api.LabyAPI;
 import net.labymod.api.addon.LabyAddon;
 import net.labymod.api.client.gui.screen.NamedScreen;
 import net.labymod.api.client.network.server.ConnectableServerData;
@@ -20,6 +19,8 @@ public class AutoReconnect extends LabyAddon<AutoReconnectConfiguration> {
 
     this.registerListener(new ServerKickListener(this));
 
+    // unregister laby overlay
+    this.labyAPI().activityOverlayRegistry().unregister(NamedScreen.DISCONNECTED.getId());
     this.labyAPI().activityOverlayRegistry().register(
         NamedScreen.DISCONNECTED,
         DisconnectedOverlay.class,
