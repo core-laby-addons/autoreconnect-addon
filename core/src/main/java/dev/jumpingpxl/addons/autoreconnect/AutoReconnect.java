@@ -12,6 +12,7 @@ import net.labymod.api.models.addon.annotation.AddonMain;
 public class AutoReconnect extends LabyAddon<AutoReconnectConfiguration> {
 
   private ConnectableServerData serverData;
+  private boolean autoReconnect;
 
   @Override
   protected void enable() {
@@ -33,7 +34,12 @@ public class AutoReconnect extends LabyAddon<AutoReconnectConfiguration> {
     return AutoReconnectConfiguration.class;
   }
 
-  public void updateServerData(ServerData serverData) {
+  public void resetServerData() {
+    this.serverData = null;
+  }
+
+  public void updateServerData(ServerData serverData, boolean autoReconnect) {
+    this.autoReconnect = autoReconnect;
     if (serverData == null) {
       this.serverData = null;
       return;
@@ -59,5 +65,9 @@ public class AutoReconnect extends LabyAddon<AutoReconnectConfiguration> {
 
   public boolean canReconnect() {
     return this.serverData != null;
+  }
+
+  public boolean isAutoReconnect() {
+    return this.autoReconnect;
   }
 }

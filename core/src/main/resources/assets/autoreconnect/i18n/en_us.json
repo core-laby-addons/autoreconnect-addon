@@ -5,6 +5,10 @@
       "enabled": {
         "name": "Enabled"
       },
+      "autoReconnect": {
+        "name": "Automatically Reconnect",
+        "description": "Automatically reconnect to the server after you've been disconnected. If this is disabled, you'll still see a reconnect button in the disconnected screen."
+      },
       "delay": {
         "name": "Seconds Until Reconnect"
       },
@@ -17,13 +21,17 @@
         "description": "Automatically reconnect after you've been kicked from the server"
       },
       "header": {
+        "autoReconnect": {
+          "name": "AutoReconnect"
+        },
         "scenarios": {
           "name": "Scenarios"
         }
       }
     },
     "activity": {
-      "reconnect": "Reconnect in: ",
+      "reconnect": "Reconnect",
+      "autoReconnect": "Reconnect in: ",
       "remainingSeconds": "%ss"
     }
   }

@@ -18,14 +18,15 @@ public class ServerKickListener {
   public void onServerKick(ServerKickEvent event) {
     Context context = event.context();
     AutoReconnectConfiguration configuration = this.autoReconnect.configuration();
+    boolean autoReconnect = configuration.autoReconnect().get();
     if (context == Context.PLAY) {
       if (!configuration.reconnectOnKick().get()) {
-        return;
+        autoReconnect = false;
       }
     } else if (!configuration.reconnectOnLoginDeny().get()) {
-      return;
+      autoReconnect = false;
     }
 
-    this.autoReconnect.updateServerData(event.serverData());
+    this.autoReconnect.updateServerData(event.serverData(), autoReconnect);
   }
 }

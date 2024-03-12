@@ -30,8 +30,9 @@ import net.labymod.api.util.concurrent.task.Task;
 @Link("disconnected.lss")
 public class DisconnectedOverlay extends AbstractLayerActivity {
 
-  private static final String RECONNECT_PREFIX = "autoreconnect.activity.reconnect";
+  private static final String RECONNECT_PREFIX = "autoreconnect.activity.autoReconnect";
   private static final String RECONNECT_REMAINING = "autoreconnect.activity.remainingSeconds";
+  private static final String RECONNECT_TEXT = "autoreconnect.activity.reconnect";
   private static final String WIDTH_VARIABLE_KEY = "--auto-reconnect-width";
 
   private static final ModifyReason UPDATE_CONTAINER = ModifyReason.of("updateButtonContainer");
@@ -61,23 +62,21 @@ public class DisconnectedOverlay extends AbstractLayerActivity {
     this.reconnectButton.addId("reconnect-button");
 
     // Pre-calculate the total width of the text so the button won't jiggle
-    String reconnect = I18n.getTranslation(RECONNECT_PREFIX);
-    String remaining = I18n.getTranslation(RECONNECT_REMAINING);
-    if (reconnect != null) {
-      TextRenderer textRenderer = autoReconnect.labyAPI().renderPipeline().textRenderer();
-      float width = textRenderer.width(reconnect + remaining);
-      this.setVariable(WIDTH_VARIABLE_KEY, width);
+    this.calculateButtonWidth();
+
+    if (autoReconnect.isAutoReconnect()) {
+      this.task = Task.builder(
+              () -> autoReconnect.labyAPI().minecraft().executeOnRenderThread(
+                  this::updateReconnectComponent
+              )
+          )
+          .repeat(1, TimeUnit.SECONDS)
+          .build();
+
+      this.task.execute();
+    } else {
+      this.task = null;
     }
-
-    this.task = Task.builder(
-            () -> autoReconnect.labyAPI().minecraft().executeOnRenderThread(
-                this::updateReconnectComponent
-            )
-        )
-        .repeat(1, TimeUnit.SECONDS)
-        .build();
-
-    this.task.execute();
   }
 
   @Override
@@ -103,7 +102,7 @@ public class DisconnectedOverlay extends AbstractLayerActivity {
   @Override
   public void onCloseScreen() {
     super.onCloseScreen();
-    this.autoReconnect.updateServerData(null);
+    this.autoReconnect.resetServerData();
     if (this.task != null && this.task.isRunning()) {
       this.task.cancel();
     }
@@ -146,12 +145,33 @@ public class DisconnectedOverlay extends AbstractLayerActivity {
     );
   }
 
+  private void calculateButtonWidth() {
+    String text;
+    if (this.autoReconnect.isAutoReconnect()) {
+      String reconnect = I18n.getTranslation(RECONNECT_PREFIX);
+      String remaining = I18n.getTranslation(RECONNECT_REMAINING);
+      if (reconnect != null) {
+        text = reconnect + remaining;
+      } else {
+        text = null;
+      }
+    } else {
+      text = I18n.getTranslation(RECONNECT_TEXT);
+    }
+
+    if (text != null) {
+      TextRenderer textRenderer = this.autoReconnect.labyAPI().renderPipeline().textRenderer();
+      float width = textRenderer.width(text);
+      this.setVariable(WIDTH_VARIABLE_KEY, width);
+    }
+  }
+
   private void backToServerList() {
     if (this.task != null && this.task.isRunning()) {
       this.task.cancel();
     }
 
-    this.autoReconnect.updateServerData(null);
+    this.autoReconnect.resetServerData();
     NavigationElement<?> navigation = this.labyAPI.navigationService().getById("multiplayer");
     this.labyAPI.minecraft().minecraftWindow().displayScreen(
         ((ScreenNavigationElement) navigation).getScreen()
@@ -173,6 +193,10 @@ public class DisconnectedOverlay extends AbstractLayerActivity {
   }
 
   private Component reconnectComponent() {
+    if (!this.autoReconnect.isAutoReconnect()) {
+      return Component.translatable(RECONNECT_TEXT);
+    }
+
     TextColor color = NamedTextColor.WHITE;
     if (this.remainingSeconds < 4) {
       color = NamedTextColor.DARK_RED;
@@ -193,7 +217,7 @@ public class DisconnectedOverlay extends AbstractLayerActivity {
   }
 
   private void reconnect() {
-    if (this.task.isRunning()) {
+    if (this.task != null && this.task.isRunning()) {
       this.task.cancel();
     }
 
