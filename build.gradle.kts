@@ -28,7 +28,7 @@ labyMod {
         author = "JumpingPxl"
         description = "Automatically reconnects to the server you got disconnected from"
         minecraftVersion = "*"
-        version = System.getenv().getOrDefault("VERSION", "0.0.1")
+        version = rootProject.version.toString()
     }
 }
 
