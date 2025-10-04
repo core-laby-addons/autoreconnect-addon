@@ -4,21 +4,12 @@ plugins {
 }
 
 val versions = providers.gradleProperty("net.labymod.minecraft-versions").get().split(";")
+
 group = "dev.jumpingpxl.addons"
 version = providers.environmentVariable("VERSION").getOrElse("1.0.0")
 
-java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
-
 labyMod {
     defaultPackageName = "dev.jumpingpxl.addons.autoreconnect" //change this to your main package name (used by all modules)
-    
-    addonInfo {
-        namespace = "autoreconnect"
-        displayName = "AutoReconnect"
-        author = "JumpingPxl"
-        description = "Automatically reconnects to the server you got disconnected from"
-        version = System.getenv().getOrDefault("VERSION", "0.0.1")
-    }
 
     minecraft {
         registerVersion(versions.toTypedArray()) {
@@ -29,6 +20,15 @@ labyMod {
                 }
             }
         }
+    }
+
+    addonInfo {
+        namespace = "autoreconnect"
+        displayName = "AutoReconnect"
+        author = "JumpingPxl"
+        description = "Automatically reconnects to the server you got disconnected from"
+        minecraftVersion = "*"
+        version = System.getenv().getOrDefault("VERSION", "0.0.1")
     }
 }
 
